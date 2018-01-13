@@ -101,7 +101,7 @@ public class PostActivity extends AppCompatActivity {
         SolutionCounters solutionCounters=new SolutionCounters();
         DocumentReference newCityRef = db.collection("cities").document("aaaa");
         solutionCounters.createCounter(newCityRef,10);
-
+       // solutionCounters.incrementCounter(newCityRef,1);
 
     }
 }

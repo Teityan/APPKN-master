@@ -24,12 +24,14 @@ import java.util.List;
  */
 public class SolutionCounters {
 
+
     private FirebaseFirestore db;
+
 
     // [START counter_classes]
     // counters/${ID}
     public class Counter {
-        int numShards;
+        public int numShards;
 
         public Counter(final int numShards) {
             this.numShards = numShards;
@@ -38,9 +40,9 @@ public class SolutionCounters {
 
     // counters/${ID}/shards/${NUM}
     public class Shard {
-        int count;
+       public int count;
 
-        public Shard(int count) {
+        public Shard(final int count) {
             this.count = count;
         }
     }
@@ -48,8 +50,8 @@ public class SolutionCounters {
 
     // [START create_counter]
     public Task<Void> createCounter(final DocumentReference ref, final int numShards) {
-        return ref.set(new Counter(numShards))
-                .continueWithTask(new Continuation<Void, Task<Void>>() {
+        // Initialize the counter document, then initialize each shard.
+        return ref.set(new Counter(numShards)).continueWithTask(new Continuation<Void, Task<Void>>() {
                     @Override
                     public Task<Void> then(@NonNull Task<Void> task) throws Exception {
                         if (!task.isSuccessful()) {

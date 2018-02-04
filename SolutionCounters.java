@@ -5,6 +5,7 @@ package teityan.com.appkn;
  */
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
@@ -17,32 +18,35 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * https://firebase.google.com/docs/firestore/solutions/counters
  */
 public class SolutionCounters {
+    Map<String, Object> user= new HashMap<>();
 
 
-    private FirebaseFirestore db;
+    private FirebaseFirestore db=FirebaseFirestore.getInstance();
 
 
     // [START counter_classes]
     // counters/${ID}
     public class Counter {
-        public int numShards;
+         int numShards;
 
-        public Counter(final int numShards) {
+        public Counter(int numShards) {
             this.numShards = numShards;
         }
     }
 
     // counters/${ID}/shards/${NUM}
     public class Shard {
-       public int count;
+       int count;
 
-        public Shard(final int count) {
+        public Shard(int count) {
             this.count = count;
         }
     }
@@ -72,7 +76,7 @@ public class SolutionCounters {
                         return Tasks.whenAll(tasks);
                     }
                 });
-    }
+   }
     // [END create_counter]
 
     // [START increment_counter]
@@ -82,9 +86,9 @@ public class SolutionCounters {
 
         return db.runTransaction(new Transaction.Function<Void>() {
             @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
+            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
                 Shard shard = transaction.get(shardRef).toObject(Shard.class);
-                shard.count += 1;
+                shard.count ++;
 
                 transaction.set(shardRef, shard);
                 return null;
@@ -105,6 +109,7 @@ public class SolutionCounters {
                             Shard shard = snap.toObject(Shard.class);
                             count += shard.count;
                         }
+                        Log.d("test", String.valueOf(count));
                         return count;
                     }
                 });

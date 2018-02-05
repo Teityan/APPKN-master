@@ -66,23 +66,23 @@ public class PostActivity extends AppCompatActivity {
             SharedPreferences dataStore = getSharedPreferences(data1, MODE_PRIVATE);
 
             time = dataStore.getInt(pk, 0);
-            time = 5;
+            time = 6;
            // if (time == 0) continue;
             str2 = pk.replace(".", "-");
             //refMsg.child(str2+).child("UserId").setValue(String.valueOf(time));
-            String sss="/"+str2;
+            String sss=str2;
 
-            DatabaseReference refEmail = database.getReference();
+            DatabaseReference refEmail = database.getReference().child(data1);
 
             refEmail.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    String aaa = (String) dataSnapshot.child(data1).child(str2).child("time").getValue();
+                    String aaa = (String) dataSnapshot.child(str2).child("time").getValue();
 
 
                     gtime= Integer.parseInt(aaa);
-                   // Log.d(gtime+"jj",aaa);
+                   Log.d(gtime+"jj",aaa);
                 }
 
                 @Override

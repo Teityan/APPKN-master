@@ -1,5 +1,6 @@
 package teityan.com.appkn;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +46,7 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+ /*
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref = database.getReference("server/saving-data/fireblog/posts");
         final PackageManager pm = getPackageManager();
@@ -108,26 +111,21 @@ public class PostActivity extends AppCompatActivity {
             });
 
 
-            //アプリ情報取得
+             //アプリ情報取得
 
 
             Log.d("aaaa", pk + ":時間：" + time);
 
         }
-
+*/
     }
 
 
     public void post(View v) {
-        String aaa = "teityan-com-appkn";
-        SolutionCounters solutionCounters = new SolutionCounters();
-        DocumentReference newCityRef = db.collection("cities").document("bbbbb");
-        //Toast.makeText(this, (CharSequence) aaab,Toast.LENGTH_SHORT).show();
-        solutionCounters.createCounter(newCityRef, 10);
-        solutionCounters.incrementCounter(newCityRef, 10);
-
-        Task<Integer> testss = solutionCounters.getCount(newCityRef);
-
-
+        Data c;
+        c = new Data();
+        Context context=this;
+    String re=c.up(context);
+        Toast.makeText(this,re+"でした",Toast.LENGTH_SHORT).show();
     }
 }

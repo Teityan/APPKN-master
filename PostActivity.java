@@ -124,7 +124,7 @@ public class PostActivity extends AppCompatActivity {
     public void post(View v) {
         Data c;
         c = new Data();
-        Context context=this;
+        Context context=getApplicationContext();
     String re=c.up(context);
         Toast.makeText(this,re+"でした",Toast.LENGTH_SHORT).show();
     }

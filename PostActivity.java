@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +22,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class PostActivity extends AppCompatActivity {
@@ -46,7 +44,7 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        mDatabase=FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference ref = database.getReference("server/saving-data/fireblog/posts");
         final PackageManager pm = getPackageManager();
         final int flags = PackageManager.GET_UNINSTALLED_PACKAGES | PackageManager.GET_DISABLED_COMPONENTS;
@@ -67,22 +65,39 @@ public class PostActivity extends AppCompatActivity {
 
             time = dataStore.getInt(pk, 0);
             time = 6;
-           // if (time == 0) continue;
+            // if (time == 0) continue;
             str2 = pk.replace(".", "-");
             //refMsg.child(str2+).child("UserId").setValue(String.valueOf(time));
-            String sss=str2;
+            String sss = str2;
+            String pks[];
+
+
 
             DatabaseReference refEmail = database.getReference().child(data1);
 
             refEmail.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    String hoge = str2;
 
-                    String aaa = (String) dataSnapshot.child(str2).child("time").getValue();
+
+                    String aaa = (String) dataSnapshot.child(hoge).child("time").getValue();
 
 
-                    gtime= Integer.parseInt(aaa);
-                   Log.d(gtime+"jj",aaa);
+                    if (aaa == null) {
+                        Log.d("hogehoge", pk);
+                        return;
+                    } else {
+                        gtime = Integer.parseInt(aaa);
+                    }
+                    Log.d(gtime + "jj", aaa);
+                    int times = gtime + time;
+                    Log.d(pk, gtime + "");
+
+                    refMsg.child(hoge).child("time").setValue(String.valueOf(hoge));
+                    refMsg.child(hoge).child("name").setValue(String.valueOf(hoge));
+                    refMsg.child(hoge).child("name").setValue(String.valueOf(aname));
+                    refMsg.child(hoge).child("time").setValue(String.valueOf(times));
                 }
 
                 @Override
@@ -93,15 +108,7 @@ public class PostActivity extends AppCompatActivity {
             });
 
 
-
-
             //アプリ情報取得
-           int  times = gtime + time;
-            Log.d(pk,gtime+"");
-            refMsg.child(str2).child("time").setValue(String.valueOf(str2));
-            refMsg.child(str2).child("name").setValue(String.valueOf(str2));
-            refMsg.child(str2).child("name").setValue(String.valueOf(aname));
-            refMsg.child(str2).child("time").setValue(String.valueOf(times));
 
 
             Log.d("aaaa", pk + ":時間：" + time);

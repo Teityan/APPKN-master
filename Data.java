@@ -44,6 +44,39 @@ public class Data {
         return data1;
     }
 
+
+    public List<Getata> get() {
+        final String data1 = Datef();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference refMsg = database.getReference(data1);
+        refMsg.keepSynced(false);
+        final DatabaseReference refEmail = database.getReference().child(data1);
+        final String[] hoges = new String[1];
+        String fff;
+        final List<Getata> lists = new ArrayList<>();
+
+        refMsg.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    String appname = (String) dataSnapshot.child("name").getValue();
+                    String time = (String) dataSnapshot.child("time").getValue();
+                    Getata datas=new Getata(time,appname);
+                    Log.d(time,appname);
+                    lists.add(datas);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ログを記録するなどError時の処理を記載
+            }
+        });
+    return lists;
+    }
+
     public String up(Context context) {
         final String data1 = Datef();
         final List<CellData> list = pakege(context);
@@ -150,6 +183,15 @@ addListenerForSingleValueEvent()
             this.pname = pname;
             this.time = time;
             this.appname = appname;
+        }
+    }
+    class Getata {
+        String gtime;
+        String gappname;
+
+        Getata( String gtime, String gappname) {
+            this.gtime = gtime;
+            this.gappname = gappname;
         }
     }
 }

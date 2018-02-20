@@ -22,8 +22,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class PostActivity extends AppCompatActivity {
@@ -119,6 +121,39 @@ public class PostActivity extends AppCompatActivity {
         }
 */
     }
+    public void posts(View v){
+        Data c=new Data();
+        final String data1 = c.Datef();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference refMsg = database.getReference(data1);
+        refMsg.keepSynced(false);
+        final DatabaseReference refEmail = database.getReference().child(data1);
+        final String[] hoges = new String[1];
+        String fff;
+        final List<Getdata> lists = new ArrayList<>();
+
+        refMsg.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    String appname = (String) dataSnapshot.child("name").getValue();
+                    String time = (String) dataSnapshot.child("time").getValue();
+                    Getdata datas=new Getdata(time,appname);
+                    Log.d(time,appname);
+                    lists.add(datas);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ログを記録するなどError時の処理を記載
+            }
+        });
+
+
+    }
 
 
     public void post(View v) {
@@ -127,5 +162,14 @@ public class PostActivity extends AppCompatActivity {
         Context context=getApplicationContext();
     String re=c.up(context);
         Toast.makeText(this,re+"でした",Toast.LENGTH_SHORT).show();
+    }
+    class Getdata {
+        String gtime;
+        String gappname;
+
+        Getdata( String gtime, String gappname) {
+            this.gtime = gtime;
+            this.gappname = gappname;
+        }
     }
 }

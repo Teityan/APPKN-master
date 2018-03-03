@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Ranking2Activity extends AppCompatActivity {
-
+    final List<Getdata> lists = new ArrayList<>();
+    final List<Map<String, String>> data = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,22 +32,25 @@ public class Ranking2Activity extends AppCompatActivity {
         final DatabaseReference refEmail = database.getReference().child(data1);
         final String[] hoges = new String[1];
         String fff;
-        final List<Getdata> lists = new ArrayList<>();
-        final List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+
+
 
 
         refMsg.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                int count=1;
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+
 
                     String appname = (String) dataSnapshot.child("name").getValue();
                     String time = (String) dataSnapshot.child("time").getValue();
-                    Map<String, String> item = new HashMap<String, String>();
-                    item.put("name", appname);
-                    item.put("time", time);
+                    count++;
+                    Map<String, String> item = new HashMap();
+                    item.put("Subject", String.valueOf(appname));
+                    item.put("Comment", String.valueOf(time));
                     data.add(item);
-
+                    Log.d(appname,time);
                 }
             }
 
@@ -55,20 +59,34 @@ public class Ranking2Activity extends AppCompatActivity {
                 // ログを記録するなどError時の処理を記載
             }
         });
+
+
+
+
+        // ListViewに表示するリスト項目をArrayListで準備する
+        for(Getdata city : lists) {
+            Map<String, String> item = new HashMap();
+
+
+            item.put("Subject", String.valueOf(city.gappname));
+            item.put("Comment", String.valueOf(city.gtime));
+            data.add(item);
+            Log.d(city.gappname,city.gtime);
+        }
+
+        // リスト項目とListViewを対応付けるArrayAdapterを用意する
         SimpleAdapter adapter = new SimpleAdapter(this, data,
                 android.R.layout.simple_list_item_2,
-                new String[]{ "name", "time" },
+                new String[] { "Subject", "Comment" },
                 new int[] { android.R.id.text1, android.R.id.text2});
 
         // ListViewにArrayAdapterを設定する
-        ListView listView = findViewById(R.id.ListView);
+        ListView listView = (ListView)findViewById(R.id.ListView);
         listView.setAdapter(adapter);
-
     }
     class Getdata {
         String gtime;
         String gappname;
-
         Getdata( String gtime, String gappname) {
             this.gtime = gtime;
             this.gappname = gappname;

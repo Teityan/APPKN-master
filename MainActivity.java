@@ -219,8 +219,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, RecordActivity.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(MainActivity.this, SActivity.class);
+        }  else if (id == R.id.nav) {
+            //
+            Intent intent = new Intent(MainActivity.this, PostActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_slideshow) {
+            Intent intent = new Intent(MainActivity.this, Record3Activity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_manage) {

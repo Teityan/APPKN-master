@@ -1,6 +1,7 @@
 package teityan.com.appkn;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -122,6 +123,9 @@ public class PostActivity extends AppCompatActivity {
 */
     }
     public void posts(View v){
+        Intent intent = new Intent (PostActivity.this, Record3Activity.class);
+        startActivity(intent);
+        /*
         Data c=new Data();
         final String data1 = c.Datef();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -151,6 +155,7 @@ public class PostActivity extends AppCompatActivity {
                 // ログを記録するなどError時の処理を記載
             }
         });
+        */
 
 
     }

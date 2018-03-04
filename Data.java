@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -27,13 +28,14 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class Data {
+    private boolean LoadCompleate=true;
 
 
     public Data() {
 
     }
 
-    public String Datef() {
+    public String getDate() {
         String data1;
         Date nowDate = new Date();
         Calendar cal = Calendar.getInstance();
@@ -43,10 +45,47 @@ public class Data {
 
         return data1;
     }
+    public boolean isLoadCompleate(){
+        return LoadCompleate;
+    }
+    public void getAppList(){
+        final ArrayList<App> Lists = new ArrayList<>();
+        final String data1 = getDate();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference refMsg = database.getReference(data1);
+        refMsg.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                LoadCompleate = true;
+                int count = 1;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String appname = (String) dataSnapshot.child("name").getValue();
+                    String time = (String) dataSnapshot.child("time").getValue();
+                    App datas=new App(Integer.valueOf(time),appname);
+                    Lists.add(datas);
+                    Log.d(time+"いいね",appname);
+
+                }
+                Record3Activity rec=new Record3Activity();
+                rec.callBack(Lists);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ログを記録するなどError時の処理を記載
+            }
+
+        });
+
+
+//        return Lists;
+ }
 
 
     public List<Getata> get() {
-        final String data1 = Datef();
+        final String data1 = getDate();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference refMsg = database.getReference(data1);
         refMsg.keepSynced(false);
@@ -78,7 +117,7 @@ public class Data {
     }
 
     public String up(Context context) {
-        final String data1 = Datef();
+        final String data1 = getDate();
         final List<CellData> list = pakege(context);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference refMsg = database.getReference(data1);
@@ -163,9 +202,11 @@ addListenerForSingleValueEvent()
             if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == ApplicationInfo.FLAG_SYSTEM)continue;
             String pks = info.packageName;
             String pkn = info.applicationInfo.loadLabel(pm).toString();
-            String data1 = Datef();
+            String data1 = getDate();
             SharedPreferences dataStore = context.getSharedPreferences(data1, MODE_PRIVATE);
-            int times = dataStore.getInt(pks, 6);
+            int times = dataStore.getInt(pks, 0);
+            Random rand=new Random();
+            times=rand.nextInt(20);
             String pks2 = pks.replace(".", "-");
             CellData data = new CellData(pks2, times, pkn);
             list.add(data);
@@ -194,4 +235,14 @@ addListenerForSingleValueEvent()
             this.gappname = gappname;
         }
     }
+    class Gd {
+        int gtime;
+        String gappname;
+
+        Gd( int gtime, String gappname) {
+            this.gtime = gtime;
+            this.gappname = gappname;
+        }
+    }
+
 }

@@ -127,7 +127,7 @@ public class PostActivity extends AppCompatActivity {
         startActivity(intent);
         /*
         Data c=new Data();
-        final String data1 = c.Datef();
+        final String data1 = c.getDate();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference refMsg = database.getReference(data1);
         refMsg.keepSynced(false);

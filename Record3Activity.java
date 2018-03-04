@@ -1,24 +1,31 @@
 package teityan.com.appkn;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class Record3Activity extends AppCompatActivity {
     ListView listView;
     final ArrayList<String> hoge = new ArrayList();
+    final Map<Integer, String> mMap = new HashMap();
+    Data dataClass = new Data();
+    final String date = dataClass.getDate();
+    ArrayList<App> appList ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,43 +36,28 @@ public class Record3Activity extends AppCompatActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         setTitle( "ランキング" );
         listView = (ListView) findViewById(R.id.ListView);
-        Data c = new Data();
-        final String data1 = c.Datef();
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference refMsg = database.getReference(data1);
-        refMsg.keepSynced(false);
-        final DatabaseReference refEmail = database.getReference().child(data1);
-        hoge.add(data1+"のランキングです！");
+
+        hoge.add(date+"のランキングです！");
+       // appList=dataClass.getAppList();
+        dataClass.getAppList();
 
 
-        refMsg.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                int count = 1;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-
-                    String appname = (String) dataSnapshot.child("name").getValue();
-                    String time = (String) dataSnapshot.child("time").getValue();
-                    hoge.add(count + "位" + appname + ":" + time + "分");
-                    Log.d(appname, time);
-                    count++;
-                }
-                set();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // ログを記録するなどError時の処理を記載
-            }
-
-        });
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
 
-    public void set () {
-        ListView listView = new ListView(this);
+        int itemId = item.getItemId();
+        if(itemId == android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    public void set (Context context) {
+        ListView listView = new ListView(context);
         setContentView(listView);
 
         // simple_list_item_1 は、 もともと用意されている定義済みのレイアウトファイルのID
@@ -75,4 +67,25 @@ public class Record3Activity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
 
     }
+public void callBack(ArrayList<App> returns){
+        appList=returns;
+    for (App app :appList){
+        Log.d(app.getSyainName(),"時間"+app.getSyainNo());
+    }
+
+
+    //SyainComparatorクラスの条件に従いソートする
+      Collections.sort(appList, new Sorts());
+
+    //結果を画面表示する
+    Iterator<App> it = appList.iterator();
+    int c=0;
+    while (it.hasNext()) {
+        App data = it.next();
+        Log.d(data.getSyainName(),"uhihohh"+data.getSyainNo());
+        hoge.add(c+"位"+data.getSyainName()+data.getSyainNo()+"分");
+    c++;
+    }
+    set(getApplicationContext());
+}
 }

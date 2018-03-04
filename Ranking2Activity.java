@@ -25,7 +25,7 @@ public class Ranking2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking2);
         Data c=new Data();
-        final String data1 = c.Datef();
+        final String data1 = c.getDate();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference refMsg = database.getReference(data1);
         refMsg.keepSynced(false);
